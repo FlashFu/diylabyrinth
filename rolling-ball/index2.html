@@ -1,0 +1,94 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Rolling Game</title>
+        <script src="http://code.createjs.com/createjs-2013.09.25.min.js"></script>
+        
+        <style>
+        body {
+            background-color:#ccc;
+        }
+        
+            #game {
+                background-color:#eee;
+                border:2px solid #222;
+            }
+        </style>
+        <script>
+            var canvas, stage, shape, circle;
+            var gravity = "none",
+                velX,velY;
+            
+            function init(){
+                velX = 0;
+                velY = 0;
+                var cj = createjs;
+                canvas = document.getElementById("game");                
+                
+               //Create a stage by getting a reference to the canvas
+                stage = new createjs.Stage(canvas);
+
+                //Create a Shape DisplayObject.
+                circle = new createjs.Shape();
+                circle.graphics.beginFill("red").drawCircle(0, 0, 40);
+                stage.addChild(circle);
+                circle.x = 400;
+                circle.y = 300;
+                //stage.update();
+                
+                
+                if(window.DeviceOrientationEvent){
+                    var gravDirectionOutput = document.createElement('div');
+                    trace.appendChild(gravDirectionOutput);
+                    //trace.innerHTML += "<p>Device Orientation</p>";
+                    window.addEventListener("deviceorientation", function(e){
+                        info.innerHTML = "<h1><li>alpha: " + e.alpha + "</li><li>beta: " + e.beta + "</li><li>gamma: " + e.gamma + "</li></h1>";
+                        if(e.beta < 0){
+                            if(e.gamma < 0){
+                                gravity = "upper left";
+                            } else {
+                                gravity = "upper right";
+                            }
+                        } else {
+                            if (e.gamma < 0) {
+                                gravity = "lower left";
+                            } else {
+                                gravity = "lower right";
+                            }
+                        }
+                        velX = e.gamma;
+                        velY = e.beta;
+                        gravDirectionOutput.innerHTML = gravity;
+                    });
+                }
+                
+                /*if(window.DeviceMotionEvent){
+                    //trace.innerHTML += "<P>Device Motion</p>";
+                    window.addEventListener("devicemotion", function(e){
+                        data2.innerHTML = "<li>x: " + e.acceleration.x + "</li><li>y: " + e.acceleration.y + "</li><li>z: " + e.acceleration.z + "</li>" ;
+                    });
+                }*/
+
+                cj.Ticker.addEventListener("tick",tick);
+                cj.Ticker.setFPS(45);
+            }
+            
+            function tick(){
+                circle.x += velX;
+                circle.y += velY;
+                //info.innerHTML  = circle.x;
+                stage.update();
+            }
+
+            window.addEventListener('load',init);
+        </script>
+    </head>
+    <body>
+        <canvas id="game" width="800" height="600"></canvas>
+        <div id="trace">
+            <ul id="data1"></ul>
+            <ul id="data2"></ul>
+            <div id="info"></div>
+        </div>
+    </body>
+</html>
