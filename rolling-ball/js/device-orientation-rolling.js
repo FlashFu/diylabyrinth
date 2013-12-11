@@ -54,7 +54,7 @@ function init(){
 
     cj.Ticker.addEventListener("tick",tick);
     cj.Ticker.setFPS(60);
-
+}
 
 function tick(){
     if(circle.x > canvas.width){
